@@ -57,7 +57,7 @@ export default function App() {
     setCart(updated);
     const data = await getRecs(productId);
     setRecs(data);
-    if (!cartPinned) setShowCartFloating(true);
+    if (!cartPinned) setShowCartFloating(true); // auto-open drawer when unpinned
   };
 
   const handleSetQty = async (productId, nextQty) => {
@@ -116,7 +116,12 @@ export default function App() {
         </div>
       </header>
 
-      <div className={`layout3 ${ordersOpen ? "withSidebar" : ""} ${!cartPinned ? "noCart" : ""}`}>
+      {/* NOTE: withDrawer is applied when unpinned AND the floating drawer is open */}
+      <div className={
+        `layout3 ${ordersOpen ? "withSidebar" : ""} ` +
+        `${!cartPinned && !showCartFloating ? "noCart" : ""} ` +
+        `${!cartPinned && showCartFloating ? "withDrawer" : ""}`
+      }>
         {/* Left Sidebar: Orders */}
         <aside className={`sidebar ${ordersOpen ? "open" : ""}`}>
           <div className="sidebarHeader">
@@ -130,7 +135,6 @@ export default function App() {
 
         {/* Main content: Products */}
         <main className="mainArea">
-
           <section id="products">
             <ProductsGrid products={products} onAdd={handleAdd} />
           </section>
